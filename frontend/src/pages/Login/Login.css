@@ -1,0 +1,21 @@
+
+
+.welcomediv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a89e9e;
+    border-radius: 20px;
+    padding: 50px;
+    background-color: white;
+}
+
+.welcome{
+    font-size: 64px;
+    color: #4A90E2;
+}
+a{
+    margin-top: 25px;
+    color: rgb(92, 90, 90);
+}

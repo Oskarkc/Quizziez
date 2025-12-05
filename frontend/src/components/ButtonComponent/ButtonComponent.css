@@ -1,0 +1,15 @@
+.buttoncomponent {
+    width: 350px;
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    background-color: #4A90E2;
+    color: white;
+    font-size: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+.buttoncomponent:hover {
+    scale: 1.1;
+    background-color: #5AA0E6;
+}

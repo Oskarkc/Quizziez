@@ -1,0 +1,17 @@
+.inputcomponent {
+    width: 50%;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    padding-left: 10px;
+    font-size: 18px;
+}
+.inputcomponent:focus{
+    outline: none;
+    border: 1px solid #4A90E2;
+}
+.inputcomponent:hover{
+    outline: none;
+    border: 1px solid #4A90E2;
+}

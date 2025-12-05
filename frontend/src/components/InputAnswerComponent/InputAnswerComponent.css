@@ -1,0 +1,20 @@
+.inputanswercomponent-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.radio-btn {
+    margin-top: 22.5px;
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;           
+    border: 2px solid #ccc;        
+    background-color: #f0f0f0;       
+    font-size: 20px;                 
+    display: flex;                   
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

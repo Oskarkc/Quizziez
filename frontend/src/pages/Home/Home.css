@@ -1,0 +1,21 @@
+.homediv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.welcomehome {
+    font-size: 48px;
+    color: #4A90E2;
+}
+.setuphomediv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a89e9e;
+    border-radius: 40px;
+    padding: 50px;
+    background-color: white;
+}
