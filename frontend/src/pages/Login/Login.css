@@ -1,5 +1,7 @@
 
-
+.inputwrapper{
+    width: 450px;
+}
 .welcomediv{
     display: flex;
     flex-direction: column;

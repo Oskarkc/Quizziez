@@ -10,9 +10,11 @@ export default function Register() {
       <h1 className="welcome" style={{ fontSize: "48px" }}>
         Create your account to get started with Quizziez!
       </h1>
-      <InputComponent type="email" placeholder="Email" />
-      <InputComponent type="password" placeholder="Password" />
-      <ButtonComponent onClick={() => navigate("/home")}>
+      <div className="inputwrapper">
+        <InputComponent type="email" placeholder="Email" />
+        <InputComponent type="password" placeholder="Password" />
+      </div>
+      <ButtonComponent style={{ marginTop:"20px" }} onClick={() => navigate("/home")}>
         Register
       </ButtonComponent>
       <a href="/">Already have an account? Login</a>

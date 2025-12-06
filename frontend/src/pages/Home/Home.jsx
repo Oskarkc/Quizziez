@@ -7,6 +7,7 @@ import CreateQuizDialog from "../../components/CreateQuizDialog/CreateQuizDialog
 export default function Home() {
     const navigate = useNavigate();
     const [activeQuizDialog, setActiveQuizDialog] = useState(false);
+
   return (
     <div className="setuphomediv">
       <div className="homeheader">
@@ -20,7 +21,7 @@ export default function Home() {
         <ButtonComponent onClick={() => navigate("/")}>Logout</ButtonComponent>
       </div>
       {activeQuizDialog && (
-        <CreateQuizDialog onClose={() => setActiveQuizDialog(false)} onSave={() => setActiveQuizDialog(false)} />
+        <CreateQuizDialog dialogVisible={setActiveQuizDialog} />
       )}
     </div>
   );

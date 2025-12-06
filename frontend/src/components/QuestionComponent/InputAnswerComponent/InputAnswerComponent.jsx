@@ -1,5 +1,5 @@
 import "./InputAnswerComponent.css";
-import InputComponent from "../InputComponent/InputComponent";
+import InputComponent from "../../InputComponent/InputComponent";
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 

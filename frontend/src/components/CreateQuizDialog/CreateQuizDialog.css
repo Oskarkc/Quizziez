@@ -9,8 +9,23 @@
 .createquizdialogcontent {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 .createquizdialog-header {
     color: #4A90E2;
-    margin-bottom: 10px;
+    margin: 0;
+}
+.scrollablediv {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.remove-question-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.remove-button:hover {
+    scale: 1;
+    background-color: #E94E4E;
 }
