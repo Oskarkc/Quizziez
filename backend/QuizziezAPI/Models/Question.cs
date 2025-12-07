@@ -7,7 +7,7 @@ public class Question
 {
     [Key]
     public int Id { get; set; }
-    [Required]
+    [Required , MaxLength(100)]
     public string QuestionText { get; set; } = null!;
     public int QuizId { get; set; }
     

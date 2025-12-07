@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace QuizziezAPI.Models;
 
-public class User
+public class AppUser : IdentityUser
 {
-    [Key] public int Id { get; set; }
-    [Required, EmailAddress] public string Email { get; set; } = null!;
-    [Required] public string Password { get; set; } = null!;
-
+    public string? RefreshToken { get; set; }         
+    public DateTime? RefreshTokenExpiryTime { get; set; }
     public virtual ICollection<Quiz> Quizzes { get; set; } = null!;
 }

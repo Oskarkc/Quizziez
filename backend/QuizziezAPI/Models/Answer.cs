@@ -7,7 +7,7 @@ public class Answer
 {
     [Key]
     public int Id { get; set; }
-    [Required]
+    [Required , MaxLength(100)]
     public string Text { get; set; } = null!;
     [Required]
     public bool IsCorrectAnswer { get; set; }

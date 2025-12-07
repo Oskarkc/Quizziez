@@ -7,12 +7,12 @@ public class Quiz
 {
     [Key]
     public int Id { get; set; }
-    [Required]
+    [Required , MaxLength(100)]
     public string Name { get; set; } = null!;
-    public int UserId { get; set; }
+    public string UserId { get; set; } = null!;
     
     [ForeignKey("UserId")]
-    public virtual User User { get; set; } = null!;
+    public virtual AppUser AppUser { get; set; } = null!;
     
     public virtual ICollection<Question> Questions { get; set; } = null!;
 }
