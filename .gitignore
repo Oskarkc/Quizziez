@@ -1,0 +1,15 @@
+﻿# Node
+node_modules/
+dist/
+
+# .NET
+bin/
+obj/
+
+# IDE
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates

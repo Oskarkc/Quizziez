@@ -1,0 +1,6 @@
+@QuizziezAPI_HostAddress = http://localhost:5141
+
+GET {{QuizziezAPI_HostAddress}}
+Accept: application/json
+
+###
