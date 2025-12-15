@@ -81,9 +81,8 @@ export default function CreateQuizDialog({ dialogVisible }) {
         />
         <div className="scrollablediv">
           {questions.map((q, index) => (
-            <div className="questionblock">
+            <div className="questionblock" key={index}>
               <QuestionComponent
-                key={index}
                 index={index}
                 onChange={(answerIndex, value) => handleQuestionChange(index, answerIndex, value)}
                 answers={q.answers}

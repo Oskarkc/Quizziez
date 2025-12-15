@@ -14,6 +14,7 @@ export default function AuthProvider({ children }) {
      headers: {
     "Content-Type": "application/json",
     },
+    withCredentials: true,
   });
 
   api.interceptors.request.use((config) => {
@@ -32,13 +33,10 @@ export default function AuthProvider({ children }) {
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (refreshToken) {
           try {
-            const res = await axios.post("http://localhost:5141/auth/refresh", {
-              accessToken: localStorage.getItem("accessToken"),
-              refreshToken: refreshToken,
-            });
+            const res = await axios.post("http://localhost:5141/auth/refresh", {} ,
+              { withCredentials: true},
+            );
 
             const newAccessToken = res.data.accessToken;
             setToken(newAccessToken);
@@ -49,7 +47,6 @@ export default function AuthProvider({ children }) {
             localStorage.removeItem("refreshToken");
             return Promise.reject(err);
           }
-        }
       }
 
       return Promise.reject(error);

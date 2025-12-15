@@ -5,24 +5,27 @@ import InputComponent from "../../components/InputComponent/InputComponent";
 import { useState } from "react";
 import { useAuth } from "../../auth/AuthProvider.jsx";
 import { Link } from "react-router-dom";
+import { useRegister } from "../../hooks/useRegister.jsx";
 
 export default function Register() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setToken, api } = useAuth();
+  const registerUser = useRegister  ();
   const handleSubmit = async () => {
-    try {
-      const response = await api.post("/auth/register", {
-        Email: email,
-        Password: password,
-      });
-      console.log("Register data:", { email, password });
-      setToken(response.data.accessToken);
-      navigate("/home");
-    } catch (error) {
-      console.error("Registration failed:", error);
-    }
+    registerUser.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          setToken(data.accessToken);
+          navigate("/home");
+        },
+        onError: (error) => {
+          console.error("Registration failed:", error);
+        },
+      }
+    );
   };
   return (
     <div className="welcomediv">
