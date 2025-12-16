@@ -23,5 +23,13 @@ public class QuizController : ControllerBase
     {
         return Ok(await _quizService.GetQuizzesAsync());
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateQuizzezAsync([FromBody] CreateQuizDto body, CancellationToken cancellationToken)
+    {
+        
+            await _quizService.CreateQuizAsync(body, cancellationToken);
+            return Ok(StatusCodes.Status201Created);
+    }
     
 }

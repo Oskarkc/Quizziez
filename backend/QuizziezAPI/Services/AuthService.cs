@@ -87,8 +87,7 @@ public class AuthService : IAuthService
 
         return new AuthResponseDto
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
+            AccessToken = accessToken
         };
     }
 

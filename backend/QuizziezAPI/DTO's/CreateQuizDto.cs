@@ -1,24 +1,21 @@
 ﻿namespace QuizziezAPI.DTO_s;
 
-public class QuizzezDto
+public class CreateQuizDto
 {
-    public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string Category { get; set; } = null!;
     public string Difficulty { get; set; } = null!;
-    public ICollection<QuestionDto> Questions { get; set; } = null!;
+    public ICollection<CreateQuestionDto> Questions { get; set; } = null!;
 }
 
-public class QuestionDto
+public class CreateQuestionDto
 {
-    public int Id { get; set; }
     public string Question { get; set; } = null!;
-    public ICollection<AnswerDto> Answers { get; set; } = null!;
+    public ICollection<CreateAnswerDto> Answers { get; set; } = null!;
 }
 
-public class AnswerDto
+public class CreateAnswerDto
 {
-    public int Id { get; set; }
     public string Answer { get; set; } = null!;
     public bool IsCorrectAnswer { get; set; }
 }

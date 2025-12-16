@@ -36,11 +36,32 @@ public class AuthController : ControllerBase
         return Ok( token );
     }
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshRequestDto dto)
+    public async Task<IActionResult> Refresh()
     {
-        var token = await _authService.RefreshTokenAsync(dto);
-        if (token == null)
+        var refreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized(new { message = "No refresh token" });
+        
+        var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        
+        var tokens = await _authService.RefreshTokenAsync(new RefreshRequestDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        });
+        
+        if (tokens == null)
             return Unauthorized(new { message = "Invalid refresh token" });
-        return Ok(token);
+        
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(30)
+        };
+        Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        
+        return Ok(tokens);
     }
 }

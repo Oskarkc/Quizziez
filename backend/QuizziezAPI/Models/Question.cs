@@ -14,5 +14,5 @@ public class Question
     [ForeignKey("QuizId")] 
     public virtual Quiz Quiz { get; set; } = null!;
     
-    public virtual ICollection<Answer> Answers { get; set; } = null!;
+    public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
 }

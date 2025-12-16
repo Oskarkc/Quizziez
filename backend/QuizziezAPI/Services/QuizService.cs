@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using QuizziezAPI.Data;
 using QuizziezAPI.DTO_s;
+using QuizziezAPI.Exceptions;
+using QuizziezAPI.Models;
 
 namespace QuizziezAPI.Services;
 
@@ -41,5 +43,40 @@ public class QuizService : IQuizService
                 }).ToList()
             }).ToList()
         });
+    }
+
+    public async Task CreateQuizAsync(CreateQuizDto body, CancellationToken cancellationToken)
+    {
+        if(body is null)
+            throw new QuizValidationException("body is null");
+        
+        var difficulty = await _context.Difficulties.FirstOrDefaultAsync(e=> e.Name == body.Difficulty, cancellationToken);
+        var category = await _context.Categories.FirstOrDefaultAsync(e => e.Name == body.Category, cancellationToken);
+        
+        if(difficulty is null)
+            throw new QuizValidationException("difficulty is null");
+        
+        if(category is null)
+            throw new QuizValidationException("category is null");
+        
+        var userId = _currentUserService.UserId;
+        var quiz = new Quiz()
+        {
+            Name = body.Name,
+            UserId = userId,
+            DifficultyId = difficulty.Id,
+            CategoryId = category.Id,
+            Questions = body.Questions.Select(q => new Question()
+            {
+                QuestionText = q.Question,
+                Answers = q.Answers.Select(a => new Answer()
+                {
+                    Text = a.Answer,
+                    IsCorrectAnswer = a.IsCorrectAnswer,
+                }).ToList()
+            }).ToList()
+        };
+        _context.Quizzes.Add(quiz);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
