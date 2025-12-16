@@ -17,7 +17,7 @@ export default function InputAnswerComponent({
         placeholder={placeholder}
         className="inputanswercomponent"
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
       />
         <button type="button" onClick={onSelect} className="radio-btn">
           {isActive ? <DoneIcon style={{ color: "green" }} /> : <CloseIcon style={{ color: "red" }} />}

@@ -12,14 +12,14 @@ export default function QuestionComponent({
   return (
     <div className="questioncomponent-wrapper">
       <InputComponent onChange={e => onChange(index, e.target.value)} placeholder={`Question ${index + 1}`} />
-      {answers.map((answer, index) => (
+      {answers.map((answer, answerIndex) => (
         <InputAnswerComponent
-            key={index}
-          onChange={e => onChange(index, e.target.value)}
+            key={answerIndex}
+          onChange={value => onChange(answerIndex, value)}
           value={answer}
-          placeholder={`Answer ${index + 1}`}
-          onSelect={() => onSelect(index)}
-          isActive={isActive == index}
+          placeholder={`Answer ${answerIndex + 1}`}
+          onSelect={() => onSelect(answerIndex)}
+          isActive={isActive == answerIndex}
         />
       ))}
     </div>
