@@ -25,12 +25,16 @@ public class QuizService : IQuizService
         var quizzez = await _context.Quizzes
             .Where(q => q.UserId == userId)
             .Include(q => q.Questions)
-            .ThenInclude(q => q.Answers)
+                .ThenInclude(q => q.Answers)
+            .Include(q => q.Category)
+            .Include(q => q.Difficulty)
             .ToListAsync();
         return quizzez.Select(q => new QuizzezDto
         {
             Id = q.Id,
             Name = q.Name,
+            Difficulty = q.Difficulty.Name,
+            Category = q.Category.Name,
             Questions = q.Questions.Select(qq => new QuestionDto
             {
                 Id = qq.Id,
