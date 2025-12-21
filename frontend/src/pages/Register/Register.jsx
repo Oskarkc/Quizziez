@@ -1,32 +1,20 @@
 import "../Login/Login.css";
-import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import InputComponent from "../../components/InputComponent/InputComponent";
-import { useState } from "react";
-import { useAuth } from "../../auth/AuthProvider.jsx";
 import { Link } from "react-router-dom";
 import { useRegister } from "../../hooks/useRegister.jsx";
+import ErrorComponent from "../../components/ErrorComponent/ErrorComponent";
 
 export default function Register() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setToken, api } = useAuth();
-  const registerUser = useRegister  ();
-  const handleSubmit = async () => {
-    registerUser.mutate(
-      { email, password },
-      {
-        onSuccess: (data) => {
-          setToken(data.accessToken);
-          navigate("/home");
-        },
-        onError: (error) => {
-          console.error("Registration failed:", error);
-        },
-      }
-    );
-  };
+  const { 
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    errors,
+  } = useRegister();
+  
   return (
     <div className="welcomediv">
       <h1 className="welcome" style={{ fontSize: "48px" }}>
@@ -39,12 +27,14 @@ export default function Register() {
           type="email"
           placeholder="Email"
         />
+        {errors.email && <ErrorComponent message={errors.email}></ErrorComponent>}
         <InputComponent
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="Password"
         />
+        {errors.password && <ErrorComponent message="Password need to have at least 6 characters, capital letter, number and special character"></ErrorComponent>}
       </div>
       <ButtonComponent style={{ marginTop: "20px" }} onClick={handleSubmit}>
         Register

@@ -5,76 +5,26 @@ import { useState } from "react";
 import SelectComponent from "../SelectComponent/SelectComponent";
 import QuestionComponent from "../QuestionComponent/QuestionComponent/QuestionComponent";
 import { useCreateQuiz } from "../../hooks/useCreateQuiz.jsx";
+import ErrorComponent from "../ErrorComponent/ErrorComponent.jsx";
 
 export default function CreateQuizDialog({ dialogVisible }) {
-  const [quizTitle, setQuizTitle] = useState("");
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [difficulty, setDifficulty] = useState("");
-  const [category, setCategory] = useState("");
-  const [questions, setQuestions] = useState([
-    { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
-  ]);
-  const { mutate: createQuiz, isLoading } = useCreateQuiz();
+  const {
+    questions,
+    setQuizTitle,
+    setCategory,
+    setDifficulty,
+    difficulty,
+    category,
+    quizTitle,
+    handleAddQuestion,
+    handleQuestionChange,
+    handleRemoveQuestion,
+    handleonSave,
+    handleBack,
+    handleSelectCorrectAnswer,
+    errors
+  } = useCreateQuiz(dialogVisible);
 
-  const handleAddQuestion = () => {
-    setQuestions([
-      ...questions,
-      { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
-    ]);
-  };
-
- const handleQuestionChange = (questionIndex, value, answerIndex = null) => {
-  const updatedQuestions = [...questions];
-  if (answerIndex === null) {
-    updatedQuestions[questionIndex].question = value;
-  } else {
-    updatedQuestions[questionIndex].answers[answerIndex] = value;
-  }
-  setQuestions(updatedQuestions);
-};
-
-  const handleRemoveQuestion = (index) => {
-    setQuestions(questions.filter((_, i) => i !== index));
-  };
-
-  const handleBack = () => {
-    setQuizTitle("");
-    setActiveIndex(null);
-    setDifficulty("");
-    setCategory("");
-    setQuestions([
-      { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
-    ]);
-    dialogVisible(false);
-  };
-
-  const handleonSave = () => {
-    if (!quizTitle || !difficulty || !category || questions.length === 0) {
-      alert("Please fill in all fields and add at least one question.");
-      return;
-    }
-    const quizData = {
-      name: quizTitle,
-      category,
-      difficulty,
-      questions: questions.map((q) => ({
-        question: q.question,
-        answers: q.answers.map((answer, index) => ({        
-          answer: answer,
-          isCorrect: index === q.correctAnswerIndex,
-        })),
-      })),
-    };
-    createQuiz(quizData, {
-      onSuccess: () => { 
-        alert("Quiz created successfully!");
-        handleBack();
-       },
-      onError: (error) => {
-        alert("Error creating quiz: " + (error.response?.data || error.message));
-      },
-    });
-};
 
   return (
     <div className="createquizdialog">
@@ -86,6 +36,7 @@ export default function CreateQuizDialog({ dialogVisible }) {
           value={quizTitle}
           onChange={(e) => setQuizTitle(e.target.value)}
         />
+        {errors.title && <ErrorComponent message={errors.title} />}
         <SelectComponent
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
@@ -96,6 +47,7 @@ export default function CreateQuizDialog({ dialogVisible }) {
           ]}
           placeholder="Select Difficulty"
         />
+        {errors.difficulty && <ErrorComponent message={errors.difficulty} />}
         <SelectComponent
           value={category}
           onChange={(e) => setCategory("Programming")}
@@ -105,15 +57,21 @@ export default function CreateQuizDialog({ dialogVisible }) {
           ]}
           placeholder="Select Category"
         />
+        {errors.category && <ErrorComponent message={errors.category} />}
         <div className="scrollablediv">
           {questions.map((q, index) => (
-            <div className="questionblock">
+            <div key={index} className="questionblock">
               <QuestionComponent
                 index={index}
-                onChange={(answerIndex, value) => handleQuestionChange(index, value, answerIndex)}
+                onQuestionChange={(value) =>
+                  handleQuestionChange(index, value)
+                }
+                onAnswerChange={(answerIndex, value) =>
+                  handleQuestionChange(index, value, answerIndex)
+                }
                 answers={q.answers}
-                isActive={activeIndex}
-                onSelect={(index) => setActiveIndex(index)}
+                isActive={q.correctAnswerIndex}
+                onSelect={(answerIndex) => handleSelectCorrectAnswer(index, answerIndex)}
               />
               {questions.length > 1 && (
                 <div className="remove-question-button-wrapper">
@@ -140,6 +98,11 @@ export default function CreateQuizDialog({ dialogVisible }) {
           >
             + Add Question
           </ButtonComponent>
+        </div>
+        <div style={{ marginTop: "10px", textAlign: "center" }}>
+            {errors.emptyQuestion && <ErrorComponent message={errors.emptyQuestion} />}
+            {errors.emptyAnswer && <ErrorComponent message={errors.emptyAnswer} />}
+            {errors.missingCorrect && <ErrorComponent message={errors.missingCorrect} />}
         </div>
         <ButtonComponent onClick={handleonSave}>Save</ButtonComponent>
         <ButtonComponent onClick={handleBack}>Back</ButtonComponent>

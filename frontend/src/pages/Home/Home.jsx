@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useState } from "react";
 import CreateQuizDialog from "../../components/CreateQuizDialog/CreateQuizDialog";
+import LogoutButtonComponent from "../../components/LogoutButtonComponent/LogoutButtonComponent";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Home() {
         <ButtonComponent onClick={() => setActiveQuizDialog(true)}>Create Quiz</ButtonComponent>
         <ButtonComponent onClick={() => navigate("/myquizzes")}>My Quizziez</ButtonComponent>
         <ButtonComponent>History</ButtonComponent>
-        <ButtonComponent onClick={() => navigate("/")}>Logout</ButtonComponent>
+        <LogoutButtonComponent />
       </div>
       {activeQuizDialog && (
         <CreateQuizDialog dialogVisible={setActiveQuizDialog} />

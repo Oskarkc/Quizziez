@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using QuizziezAPI.DTO_s;
+using QuizziezAPI.Exceptions;
 using QuizziezAPI.Models;
 
 namespace QuizziezAPI.Services;
@@ -31,7 +32,7 @@ public class AuthService : IAuthService
             {
                 Console.WriteLine($"Identity error: {error.Code} - {error.Description}");
             }
-            return null;
+            throw new RegistrationException();
         }
     
         var tokens = await CreateTokensForUserAsync(user);
@@ -41,9 +42,9 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto?> LoginAsync(LoginDto body)
     {
         var user = await _userManager.FindByEmailAsync(body.Email);
-        if (user == null) return null;
+        if (user == null) throw new InvalidEmailException();
 
-        if (!await _userManager.CheckPasswordAsync(user, body.Password)) return null;
+        if (!await _userManager.CheckPasswordAsync(user, body.Password)) throw new InvalidPasswordException();
 
         var tokens = await CreateTokensForUserAsync(user);
         return tokens;
@@ -52,17 +53,14 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto?> RefreshTokenAsync(RefreshRequestDto dto)
     {
         var principal = GetPrincipalFromExpiredToken(dto.AccessToken);
-        if (principal == null) return null;
-
-        var userId = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        if (string.IsNullOrEmpty(userId)) return null;
-
+        if (principal == null) throw new AuthException("invalid principal");
+        var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) throw new AuthException("invalid user id");
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null) return null;
-        
+        if (user == null) throw new AuthException("invalid user");
         if (user.RefreshToken != dto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            return null;
-        
+            throw new AuthException("refresh token expired and not matching");
+    
         var tokens = await CreateTokensForUserAsync(user);
         return tokens;
     }
@@ -78,6 +76,7 @@ public class AuthService : IAuthService
 
     private async Task<AuthResponseDto> CreateTokensForUserAsync(AppUser user)
     {
+        Console.WriteLine("create tokens for user");
         var accessToken = GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
 
@@ -87,7 +86,8 @@ public class AuthService : IAuthService
 
         return new AuthResponseDto
         {
-            AccessToken = accessToken
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
         };
     }
 

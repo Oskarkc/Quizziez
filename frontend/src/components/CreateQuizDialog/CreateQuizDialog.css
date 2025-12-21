@@ -1,10 +1,13 @@
 .createquizdialog {
+    max-height: 95%;
     padding: 40px;             
     background-color: white;   
     border-radius: 20px;   
     border: 2px solid #4A90E2;
     position: fixed;           
-    z-index: 1000;             
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;             
 }
 .createquizdialogcontent {
     display: flex;

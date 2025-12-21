@@ -18,41 +18,64 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterDto body)
     {
-        var token = await _authService.RegisterUserAsync(body);
-        
-        if (token == null)
-            return BadRequest("User could not be created");
-        
-        return Ok( token );
+        try
+        {
+            var token = await _authService.RegisterUserAsync(body);
+            if (token != null)
+                SetRefreshTokenCookie(token.RefreshToken);
+            return Ok(token);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto body)
     {
-        var token = await _authService.LoginAsync(body);
-        if(token == null)
-            return BadRequest(new { message = "Invalid credentials" });
-        
-        return Ok( token );
+        try
+        {
+            var token = await _authService.LoginAsync(body);
+            if (token != null)
+                SetRefreshTokenCookie(token.RefreshToken);
+            return Ok(token);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
+    
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()
     {
         var refreshToken = Request.Cookies["refreshToken"];
         if (string.IsNullOrEmpty(refreshToken))
-            return Unauthorized(new { message = "No refresh token" });
-        
+            return Unauthorized("No refresh token");
         var accessToken = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        
-        var tokens = await _authService.RefreshTokenAsync(new RefreshRequestDto
+
+        try
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
-        });
+            var token = await _authService.RefreshTokenAsync(new RefreshRequestDto
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            });
+            if (token == null)
+                return Unauthorized( "Invalid refresh token" );
         
-        if (tokens == null)
-            return Unauthorized(new { message = "Invalid refresh token" });
+            SetRefreshTokenCookie(token.RefreshToken);
         
+            return Ok(token);
+
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
+    }
+    private void SetRefreshTokenCookie(string refreshToken)
+    {
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
@@ -61,7 +84,5 @@ public class AuthController : ControllerBase
             Expires = DateTime.UtcNow.AddDays(30)
         };
         Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
-        
-        return Ok(tokens);
     }
 }

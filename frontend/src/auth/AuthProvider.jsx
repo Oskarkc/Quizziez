@@ -1,29 +1,32 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(undefined);
 
+
 export default function AuthProvider({ children }) {
+  const navigate = useNavigate();
   const [token, setTokenState] = useState(() =>
     localStorage.getItem("accessToken")
   );
 
   const api = axios.create({
     baseURL: "http://localhost:5141",
-     headers: {
-    "Content-Type": "application/json",
+    headers: {
+      "Content-Type": "application/json",
     },
     withCredentials: true,
   });
-
+ 
   api.interceptors.request.use((config) => {
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers["Authorization"] = `Bearer ${token}`;
-  }
-  return config;
-});
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  });
+
 
   api.interceptors.response.use(
     (response) => response,
@@ -32,21 +35,29 @@ export default function AuthProvider({ children }) {
 
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
+        try {
+          const res = await axios.post(
+            "http://localhost:5141/auth/refresh",
+            {},
+            {
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-          try {
-            const res = await axios.post("http://localhost:5141/auth/refresh", {} ,
-              { withCredentials: true},
-            );
-
-            const newAccessToken = res.data.accessToken;
-            setToken(newAccessToken);
-            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-            return api(originalRequest);
-          } catch (err) {
-            setToken(null);
-            localStorage.removeItem("refreshToken");
-            return Promise.reject(err);
-          }
+          const newAccessToken = res.data.accessToken;
+          setToken(newAccessToken);
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          return api(originalRequest);
+        } catch (err) {
+          console.error("Sesja wygasła, przekierowanie do logowania.");
+          setToken(null);
+          localStorage.removeItem("refreshToken");
+          navigate("/");
+          return Promise.reject(err);
+        }
       }
 
       return Promise.reject(error);
