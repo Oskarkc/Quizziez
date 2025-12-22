@@ -3,7 +3,8 @@ import InputComponent from "../../InputComponent/InputComponent";
 import "./QuestionComponent.css";
 
 export default function QuestionComponent({
-    index,
+  index,
+  questionValue,
   onQuestionChange,
   onAnswerChange,
   onSelect,
@@ -12,11 +13,15 @@ export default function QuestionComponent({
 }) {
   return (
     <div className="questioncomponent-wrapper">
-      <InputComponent onChange={e => onQuestionChange(e.target.value)} placeholder={`Question ${index + 1}`} />
+      <InputComponent
+        onChange={(e) => onQuestionChange(e.target.value)}
+        placeholder={`Question ${index + 1}`}
+        value={questionValue}
+      />
       {answers.map((answer, answerIndex) => (
         <InputAnswerComponent
-            key={answerIndex}
-          onChange={value => onAnswerChange(answerIndex, value)}
+          key={answerIndex}
+          onChange={(value) => onAnswerChange(answerIndex, value)}
           value={answer}
           placeholder={`Answer ${answerIndex + 1}`}
           onSelect={() => onSelect(answerIndex)}

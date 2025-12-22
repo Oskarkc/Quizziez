@@ -31,5 +31,18 @@ public class QuizController : ControllerBase
             await _quizService.CreateQuizAsync(body, cancellationToken);
             return Ok(StatusCodes.Status201Created);
     }
+    [HttpDelete ("{id}")]
+    public async Task<IActionResult> DeleteQuizzezAsync([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _quizService.DeleteQuizzezAsync(id, cancellationToken);
+            return Ok(StatusCodes.Status204NoContent);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
     
 }

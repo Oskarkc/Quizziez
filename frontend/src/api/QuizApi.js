@@ -6,3 +6,7 @@ export const getUserQuizzes = async (api) => {
   const response = await api.get("/api/quiz");
   return response.data;
 }
+export const deleteUserQuiz = async (api, quizId) => {
+  const response = await api.delete(`/api/quiz/${quizId}`);
+  return response.data;
+}

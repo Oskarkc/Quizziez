@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import QuizCardComponent from '../../components/QuizCardComponent/QuizCardComponent';
 import { useGetUserQuiz } from '../../hooks/useGetUserQuiz';
 
+
 export default function MyQuiz() {
     const navigate = useNavigate();
     const { data  } = useGetUserQuiz();
@@ -14,9 +15,10 @@ export default function MyQuiz() {
             <ButtonComponent onClick={() => navigate("/home")}>Back To Home</ButtonComponent>
             <div className="quizcardcontainer">
                 {data?.map((quiz) => (
-                    <QuizCardComponent key={quiz.id} quiz={quiz} />
+                    <QuizCardComponent key={quiz.id} quiz={quiz} onClickDelete={() => setIsDialogOpen(true)}
+                     />
                 ))}
-            </div>
+            </div>       
         </div>
     );
 }

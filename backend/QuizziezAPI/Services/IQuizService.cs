@@ -7,4 +7,5 @@ public interface IQuizService
 {
     public Task<IEnumerable<QuizzezDto>> GetQuizzesAsync();
     public Task CreateQuizAsync(CreateQuizDto body, CancellationToken cancellationToken);
+    public Task DeleteQuizzezAsync([FromRoute] int id, CancellationToken cancellationToken);
 }

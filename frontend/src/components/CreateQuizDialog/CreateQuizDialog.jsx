@@ -60,9 +60,10 @@ export default function CreateQuizDialog({ dialogVisible }) {
         {errors.category && <ErrorComponent message={errors.category} />}
         <div className="scrollablediv">
           {questions.map((q, index) => (
-            <div key={index} className="questionblock">
+            <div key={q.id} className="questionblock">
               <QuestionComponent
                 index={index}
+                value={q.question}
                 onQuestionChange={(value) =>
                   handleQuestionChange(index, value)
                 }

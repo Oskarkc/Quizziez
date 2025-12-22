@@ -83,4 +83,13 @@ public class QuizService : IQuizService
         _context.Quizzes.Add(quiz);
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task DeleteQuizzezAsync(int id, CancellationToken cancellationToken)
+    {
+        var quiz = await _context.Quizzes.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        if(quiz is null)
+            throw new QuizValidationException("quiz is null");
+        _context.Quizzes.Remove(quiz);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

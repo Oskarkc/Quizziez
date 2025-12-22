@@ -67,7 +67,7 @@ export const useCreateQuiz = (dialogVisible) => {
   const handleAddQuestion = () => {
     setQuestions([
       ...questions,
-      { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
+      { id: Date.now(), question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
     ]);
   };
 
