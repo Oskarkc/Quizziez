@@ -1,13 +1,13 @@
-import "./CreateQuizDialog.css";
+import "./EditQuizDialog.css";
 import InputComponent from "../InputComponent/InputComponent";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import { useState } from "react";
 import SelectComponent from "../SelectComponent/SelectComponent";
 import QuestionComponent from "../QuestionComponent/QuestionComponent/QuestionComponent";
-import { useCreateQuiz } from "../../hooks/useCreateQuiz.jsx";
+import { useEditQuiz } from "../../hooks/useEditQuiz.jsx";
 import ErrorComponent from "../ErrorComponent/ErrorComponent.jsx";
 
-export default function CreateQuizDialog({ dialogVisible }) {
+export default function EditQuizDialog({ dialogVisible , existingQuiz }) {
   const {
     questions,
     setQuizTitle,
@@ -23,13 +23,13 @@ export default function CreateQuizDialog({ dialogVisible }) {
     handleBack,
     handleSelectCorrectAnswer,
     errors
-  } = useCreateQuiz(dialogVisible);
+  } = useEditQuiz(dialogVisible , existingQuiz);
 
 
   return (
-    <div className="createquizdialog">
-      <div className="createquizdialogcontent">
-        <h1 className="createquizdialog-header">Create a New Quiz</h1>
+    <div className="editquizdialog">
+      <div className="editquizdialogcontent">
+        <h1 className="editquizdialog-header">Edit Quiz</h1>
         <InputComponent
           type="text"
           placeholder="Quiz Title"
@@ -63,14 +63,14 @@ export default function CreateQuizDialog({ dialogVisible }) {
             <div key={q.id} className="questionblock">
               <QuestionComponent
                 index={index}
-                value={q.question}
+                questionValue={q.question}
                 onQuestionChange={(value) =>
                   handleQuestionChange(index, value)
                 }
                 onAnswerChange={(answerIndex, value) =>
                   handleQuestionChange(index, value, answerIndex)
                 }
-                answers={q.answers}
+                answers={q.answers.map(a => a.text)}
                 isActive={q.correctAnswerIndex}
                 onSelect={(answerIndex) => handleSelectCorrectAnswer(index, answerIndex)}
               />

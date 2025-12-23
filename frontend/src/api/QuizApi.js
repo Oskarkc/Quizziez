@@ -10,3 +10,7 @@ export const deleteUserQuiz = async (api, quizId) => {
   const response = await api.delete(`/api/quiz/${quizId}`);
   return response.data;
 }
+export const editUserQuiz = async (api, quizId, quizData) => {
+  const response = await api.put(`/api/quiz/${quizId}`, quizData);
+  return response.data;
+}

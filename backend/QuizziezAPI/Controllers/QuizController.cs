@@ -44,5 +44,18 @@ public class QuizController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> EditQuizzezAsync([FromRoute] int id,[FromBody] EditQuizDto body, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _quizService.EditQuizzezAsync(id,body, cancellationToken);
+            return Ok("Quiz updated");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
 }

@@ -92,13 +92,13 @@ export const useCreateQuiz = (dialogVisible) => {
     }
     const quizData = {
       name: quizTitle,
-      category,
-      difficulty,
+      category: category,
+      difficulty: difficulty,
       questions: questions.map((q) => ({
         question: q.question,
         answers: q.answers.map((answer, index) => ({
           answer: answer,
-          isCorrect: index === q.correctAnswerIndex,
+          isCorrectAnswer: index === q.correctAnswerIndex,
         })),
       })),
     };

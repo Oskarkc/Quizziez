@@ -1,0 +1,41 @@
+.editquizdialog {
+    max-height: 95%;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    width: 100vw;
+    height: 100vh;        
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;             
+}
+.editquizdialogcontent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px;             
+    background-color: white;   
+    border-radius: 20px;   
+    border: 2px solid #4A90E2;
+}
+.editquizdialog-header {
+    color: #4A90E2;
+    margin: 0;
+}
+.scrollablediv {
+    width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.remove-question-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.remove-button:hover {
+    scale: 1;
+    background-color: #E94E4E;
+}
