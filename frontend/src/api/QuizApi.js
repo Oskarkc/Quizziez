@@ -14,3 +14,7 @@ export const editUserQuiz = async (api, quizId, quizData) => {
   const response = await api.put(`/api/quiz/${quizId}`, quizData);
   return response.data;
 }
+export const getAllQuizzes = async (api) => {
+  const response = await api.get("/api/quiz/play");
+  return response.data;
+}

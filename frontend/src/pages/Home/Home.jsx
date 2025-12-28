@@ -15,7 +15,7 @@ export default function Home() {
         <h1 className="welcomehome">Welcome to Quizziez!</h1>
       </div>
       <div className="homediv">
-        <ButtonComponent>Play</ButtonComponent>
+        <ButtonComponent onClick={() => navigate("/play")}>Play</ButtonComponent>
         <ButtonComponent onClick={() => setActiveQuizDialog(true)}>Create Quiz</ButtonComponent>
         <ButtonComponent onClick={() => navigate("/myquizzes")}>My Quizziez</ButtonComponent>
         <ButtonComponent>History</ButtonComponent>

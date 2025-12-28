@@ -24,6 +24,11 @@ public class QuizController : ControllerBase
         return Ok(await _quizService.GetQuizzesAsync());
     }
 
+    [HttpGet("play")]
+    public async Task<IActionResult> GetPlayAsync()
+    {
+        return Ok(await _quizService.GetQuizzesAsync());
+    }
     [HttpPost]
     public async Task<IActionResult> CreateQuizzezAsync([FromBody] CreateQuizDto body, CancellationToken cancellationToken)
     {

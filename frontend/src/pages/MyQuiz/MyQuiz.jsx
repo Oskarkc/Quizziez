@@ -15,8 +15,7 @@ export default function MyQuiz() {
             <ButtonComponent onClick={() => navigate("/home")}>Back To Home</ButtonComponent>
             <div className="quizcardcontainer">
                 {data?.map((quiz) => (
-                    <QuizCardComponent key={quiz.id} quiz={quiz} onClickEdit={() => setIsDialogOpen(true)} onClickDelete={() => setIsDialogOpen(true)}
-                     />
+                    <QuizCardComponent key={quiz.id} quiz={quiz} isEditable={true} />                    
                 ))}
             </div>       
         </div>

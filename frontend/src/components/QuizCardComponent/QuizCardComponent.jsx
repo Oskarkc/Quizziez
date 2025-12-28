@@ -6,11 +6,14 @@ import { useState } from "react";
 import AllertDialog from "../AllertDialog/AllertDialog";
 import { useDeleteUserQuiz } from "../../hooks/useDeleteUserQuiz";
 import EditQuizDialog from "../EditQuizDialog/EditQuizDialog";
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
+import { useNavigate } from "react-router-dom";
 
-export default function QuizCardComponent({ quiz }) {
+export default function QuizCardComponent({ quiz, isEditable }) {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const handleYes = useDeleteUserQuiz(quiz.id, () => setIsDeleteDialogOpen(false));
+    const handlePlay = () => {{}};
     
 
   return (
@@ -20,10 +23,13 @@ export default function QuizCardComponent({ quiz }) {
         <p>Category: {quiz.category}</p>
         <p>Difficulty: {quiz.difficulty}</p>
       </div>
-      <div className="contentBtns">
+      {isEditable && <div className="contentBtns">
         <ButtonComponent onClick={() => setIsEditDialogOpen(true)} style={{"width":"50px", "backgroundColor":"#023618"}}><EditIcon /></ButtonComponent>
         <ButtonComponent onClick={() => setIsDeleteDialogOpen(true)} style={{"width":"50px", "backgroundColor":"#A41623"}}><DeleteOutlineIcon /></ButtonComponent>
-      </div>
+      </div>}
+      {!isEditable && <div className="contentBtns">
+        <ButtonComponent onClick={handlePlay} style={{"width":"50px", "backgroundColor":"#023618"}}><PlayArrowOutlinedIcon /></ButtonComponent>
+      </div>}
       {isDeleteDialogOpen && <AllertDialog message="Are you sure you want to delete this quiz?" onNo={()=>setIsDeleteDialogOpen(false)} onYes={() => {handleYes(quiz.id, () => setIsDeleteDialogOpen(false)) }} />}
       {isEditDialogOpen && <EditQuizDialog dialogVisible={setIsEditDialogOpen} existingQuiz={quiz} />}
     </div>

@@ -47,6 +47,36 @@ public class QuizService : IQuizService
             }).ToList()
         });
     }
+
+    public async Task<IEnumerable<QuizzezDto>> GetAllQuizzezAsync()
+    {
+        var quizzez = await _context.Quizzes
+            .Include(c => c.Category)
+            .Include(d => d.Difficulty)
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.Answers)
+            .ToListAsync();
+        return quizzez.Select(q => new QuizzezDto
+            {
+                Id = q.Id,
+                Name = q.Name,
+                Difficulty = q.Difficulty.Name,
+                Category = q.Category.Name,
+                Questions = q.Questions.Select(qq => new QuestionDto
+                {
+                    Id = qq.Id,
+                    Question = qq.QuestionText,
+                    Answers = qq.Answers.Select(a => new AnswerDto
+                    {
+                        Id = a.Id,
+                        Answer = a.Text,
+                        IsCorrectAnswer = a.IsCorrectAnswer,
+                    }).ToList()
+                }).ToList()
+            }
+
+        );
+    }
     public async Task CreateQuizAsync(CreateQuizDto body, CancellationToken cancellationToken)
     {
         if(body is null)
