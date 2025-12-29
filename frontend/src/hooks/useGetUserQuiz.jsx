@@ -8,12 +8,6 @@ export const useGetUserQuiz = () => {
         {
             queryKey: ['userQuizzes'],
             queryFn: () => getUserQuizzes(api),
-            onSuccess: (data) => {
-                console.log("Pobrano quizy użytkownika:", data);
-        },
-            onError: (error) => {
-                console.error("Błąd przy pobieraniu quizów użytkownika:", error.response?.data || error.message);
-            },
         }
     );
 }

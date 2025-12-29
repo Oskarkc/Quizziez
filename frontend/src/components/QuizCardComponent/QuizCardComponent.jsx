@@ -2,7 +2,7 @@ import "./QuizCardComponent.css";
 import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
-import { useState } from "react";
+import { use, useState } from "react";
 import AllertDialog from "../AllertDialog/AllertDialog";
 import { useDeleteUserQuiz } from "../../hooks/useDeleteUserQuiz";
 import EditQuizDialog from "../EditQuizDialog/EditQuizDialog";
@@ -12,8 +12,9 @@ import { useNavigate } from "react-router-dom";
 export default function QuizCardComponent({ quiz, isEditable }) {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const navigate = useNavigate();
     const handleYes = useDeleteUserQuiz(quiz.id, () => setIsDeleteDialogOpen(false));
-    const handlePlay = () => {{}};
+    const handlePlay = () => { navigate(`/play/${quiz.id}`)};
     
 
   return (

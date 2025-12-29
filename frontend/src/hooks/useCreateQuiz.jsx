@@ -6,7 +6,7 @@ import { useState } from "react";
 export const useCreateQuiz = (dialogVisible) => {
   const { api } = useAuth();
   const [questions, setQuestions] = useState([
-    { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
+    { id: Date.now() ,question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
   ]);
   const [difficulty, setDifficulty] = useState("");
   const [category, setCategory] = useState("");
@@ -59,7 +59,7 @@ export const useCreateQuiz = (dialogVisible) => {
     setDifficulty("");
     setCategory("");
     setQuestions([
-      { question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
+      { id: Date.now() ,question: "", answers: ["", "", "", ""], correctAnswerIndex: null },
     ]);
     dialogVisible(false);
   };

@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthProvider from "./auth/AuthProvider.jsx";
 import MyQuiz from "./pages/MyQuiz/MyQuiz.jsx";
 import Play from "./pages/Play/Play.jsx";
+import Game from "./pages/Game/Game.jsx";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/myquizzes" element={<MyQuiz />} />
           <Route path="/play" element={<Play />} />
+          <Route path="/play/:quizId" element={<Game />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

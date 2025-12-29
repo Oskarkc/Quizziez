@@ -132,9 +132,6 @@ public class QuizService : IQuizService
         
                 
         quiz.Name = body.Name;
-     
-        
-        
         
         var questionsToRemove = quiz.Questions
             .Where(q => !body.Questions.Any(d => d.Id == q.Id && d.Id != 0))
@@ -182,5 +179,57 @@ public class QuizService : IQuizService
             }
         }
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<QuizOptionsDto> GetQuizzesOptionsAsync()
+    {
+        var categories = await _context.Categories.ToListAsync();
+        var difficulties = await _context.Difficulties.ToListAsync();
+
+        return new QuizOptionsDto()
+        {
+            Difficulties = difficulties.Select(d => new DifficultyDto()
+            {
+                Name = d.Name,
+            }).ToList(),
+            Categories = categories.Select(c => new CategoryDto()
+            {
+                Name = c.Name,
+            }).ToList()
+        };
+    }
+
+    public async Task<QuizzezDto> GetQuizById(int id)
+    {
+        var quiz = await _context.Quizzes
+            .Include(q => q.Questions)
+                .ThenInclude(q => q.Answers)
+            .Include(c => c.Category)
+            .Include(d => d.Difficulty)
+            .FirstOrDefaultAsync(q => q.Id == id);
+        if (quiz is null)
+        {
+            throw new QuizNotFoundException("Quiz not found");
+        }
+
+        return new QuizzezDto()
+        {
+            Id = quiz.Id,
+            Name = quiz.Name,
+            Difficulty = quiz.Difficulty.Name,
+            Category = quiz.Category.Name,
+            Questions = quiz.Questions.Select(q => new QuestionDto()
+            {
+                Id = q.Id,
+                Question = q.QuestionText,
+                Answers = q.Answers.Select(a => new AnswerDto()
+                {
+                    Id = a.Id,
+                    Answer = a.Text,
+                    IsCorrectAnswer = a.IsCorrectAnswer,
+                }).ToList()
+
+            }).ToList()
+        };
     }
 }

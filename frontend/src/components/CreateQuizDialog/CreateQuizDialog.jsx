@@ -6,6 +6,7 @@ import SelectComponent from "../SelectComponent/SelectComponent";
 import QuestionComponent from "../QuestionComponent/QuestionComponent/QuestionComponent";
 import { useCreateQuiz } from "../../hooks/useCreateQuiz.jsx";
 import ErrorComponent from "../ErrorComponent/ErrorComponent.jsx";
+import { useGetAllQuizzesOptions } from "../../hooks/useGetQuizzezOptions.jsx";
 
 export default function CreateQuizDialog({ dialogVisible }) {
   const {
@@ -25,6 +26,7 @@ export default function CreateQuizDialog({ dialogVisible }) {
     errors
   } = useCreateQuiz(dialogVisible);
 
+  const { data: optionsData , mapper } = useGetAllQuizzesOptions();
 
   return (
     <div className="createquizdialog">
@@ -40,21 +42,14 @@ export default function CreateQuizDialog({ dialogVisible }) {
         <SelectComponent
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          options={[
-            { value: "Easy", label: "Easy" },
-            { value: "Medium", label: "Medium" },
-            { value: "Hard", label: "Hard" },
-          ]}
+          options={mapper(optionsData?.difficulties || [])}
           placeholder="Select Difficulty"
         />
         {errors.difficulty && <ErrorComponent message={errors.difficulty} />}
         <SelectComponent
           value={category}
-          onChange={(e) => setCategory("Programming")}
-          options={[
-            { value: "multiple", label: "Multiple Choice" },
-            { value: "truefalse", label: "True/False" },
-          ]}
+          onChange={(e) => setCategory(e.target.value)}
+          options={mapper(optionsData?.categories || [])}
           placeholder="Select Category"
         />
         {errors.category && <ErrorComponent message={errors.category} />}

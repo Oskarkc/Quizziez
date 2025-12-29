@@ -18,3 +18,11 @@ export const getAllQuizzes = async (api) => {
   const response = await api.get("/api/quiz/play");
   return response.data;
 }
+export const getQuizzezOptions = async (api) => {
+  const response = await api.get("/api/quiz/options");
+  return response.data;
+}
+export const getQuizById = async (api, quizId) => {
+  const response = await api.get(`/api/quiz/${quizId}`);
+  return response.data;
+}

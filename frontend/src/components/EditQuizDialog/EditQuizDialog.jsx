@@ -6,6 +6,7 @@ import SelectComponent from "../SelectComponent/SelectComponent";
 import QuestionComponent from "../QuestionComponent/QuestionComponent/QuestionComponent";
 import { useEditQuiz } from "../../hooks/useEditQuiz.jsx";
 import ErrorComponent from "../ErrorComponent/ErrorComponent.jsx";
+import { useGetAllQuizzesOptions } from "../../hooks/useGetQuizzezOptions.jsx";
 
 export default function EditQuizDialog({ dialogVisible , existingQuiz }) {
   const {
@@ -25,6 +26,8 @@ export default function EditQuizDialog({ dialogVisible , existingQuiz }) {
     errors
   } = useEditQuiz(dialogVisible , existingQuiz);
 
+  const { data: optionsData , mapper } = useGetAllQuizzesOptions();
+
 
   return (
     <div className="editquizdialog">
@@ -40,21 +43,14 @@ export default function EditQuizDialog({ dialogVisible , existingQuiz }) {
         <SelectComponent
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          options={[
-            { value: "Easy", label: "Easy" },
-            { value: "Medium", label: "Medium" },
-            { value: "Hard", label: "Hard" },
-          ]}
+          options={mapper(optionsData?.difficulties || [])}
           placeholder="Select Difficulty"
         />
         {errors.difficulty && <ErrorComponent message={errors.difficulty} />}
         <SelectComponent
           value={category}
-          onChange={(e) => setCategory("Programming")}
-          options={[
-            { value: "multiple", label: "Multiple Choice" },
-            { value: "truefalse", label: "True/False" },
-          ]}
+          onChange={(e) => setCategory(e.target.value)}
+          options={mapper(optionsData?.categories || [])}
           placeholder="Select Category"
         />
         {errors.category && <ErrorComponent message={errors.category} />}

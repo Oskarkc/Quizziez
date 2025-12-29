@@ -1,0 +1,33 @@
+.gamepagelayout{
+    display: flex;
+    flex-direction: column;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    padding: 50px;
+    width : 50vw;
+    height: 50vh;
+}
+.header{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+}
+.questionblock{
+   width: 100%;
+   height: 60%;
+}
+.btndiv{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.answersdiv{
+    display: flex;
+    height: 100%;
+    justify-content: space-around;
+}

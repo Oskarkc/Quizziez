@@ -8,12 +8,6 @@ export const useGetAllQuizzes = () => {
         {
             queryKey: ['allQuizzes'],
             queryFn: () => getAllQuizzes(api),
-            onSuccess: (data) => {
-                console.log("Pobrano wszystkie quizy:", data);
-        },
-            onError: (error) => {
-                console.error("Błąd przy pobieraniu wszystkich quizów:", error.response?.data || error.message);    
-            },
         }
     );
 }

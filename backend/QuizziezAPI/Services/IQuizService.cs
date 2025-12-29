@@ -9,4 +9,6 @@ public interface IQuizService
     public Task CreateQuizAsync(CreateQuizDto body, CancellationToken cancellationToken);
     public Task DeleteQuizzezAsync([FromRoute] int id, CancellationToken cancellationToken);
     public Task EditQuizzezAsync([FromRoute] int id, EditQuizDto body, CancellationToken cancellationToken);
+    public Task<QuizOptionsDto> GetQuizzesOptionsAsync();
+    public Task<QuizzezDto> GetQuizById(int id);
 }

@@ -21,20 +21,42 @@ public class QuizController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetQuizzesAsync()
     {
-        return Ok(await _quizService.GetQuizzesAsync());
+        try
+        {
+            return Ok(await _quizService.GetQuizzesAsync());
+        }
+        catch (Exception e)
+        {
+           return BadRequest(e.Message);
+        }
+        
     }
 
     [HttpGet("play")]
     public async Task<IActionResult> GetPlayAsync()
     {
-        return Ok(await _quizService.GetQuizzesAsync());
+        try
+        {
+            return Ok(await _quizService.GetQuizzesAsync());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
     [HttpPost]
     public async Task<IActionResult> CreateQuizzezAsync([FromBody] CreateQuizDto body, CancellationToken cancellationToken)
     {
-        
+        try
+        {
             await _quizService.CreateQuizAsync(body, cancellationToken);
             return Ok(StatusCodes.Status201Created);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     [HttpDelete ("{id}")]
     public async Task<IActionResult> DeleteQuizzezAsync([FromRoute] int id, CancellationToken cancellationToken)
@@ -57,6 +79,32 @@ public class QuizController : ControllerBase
         {
             await _quizService.EditQuizzezAsync(id,body, cancellationToken);
             return Ok("Quiz updated");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("options")]
+    public async Task<IActionResult> GetOptionsAsync()
+    {
+        try
+        {
+            return Ok(await _quizService.GetQuizzesOptionsAsync());
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetQuizzezByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            return Ok(await _quizService.GetQuizById(id));
         }
         catch (Exception e)
         {
