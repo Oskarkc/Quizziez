@@ -48,7 +48,7 @@ public class QuizService : IQuizService
         });
     }
 
-    public async Task<IEnumerable<QuizzezDto>> GetAllQuizzezAsync()
+    public async Task<IEnumerable<QuizzezDto>> GetAllQuizzesAsync()
     {
         var quizzez = await _context.Quizzes
             .Include(c => c.Category)
@@ -231,5 +231,23 @@ public class QuizService : IQuizService
 
             }).ToList()
         };
+    }
+
+    public async Task CreateQuizAttemptAsync(int quizId , CreateQuizAttemptDto body, CancellationToken cancellationToken)
+    {
+        var userId = _currentUserService.UserId;
+        if (body is null)
+            throw new QuizValidationException("body is null");
+        if (body.Score < 0 || body.Score > 100) 
+            throw new QuizValidationException("score is out of range");
+        var quizAttempt = new QuizAttempt()
+        {
+            QuizId = quizId,
+            UserId = userId,
+            Score = body.Score,
+            PlayedAt = DateTime.UtcNow,
+        };
+        _context.QuizAttempts.Add(quizAttempt);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

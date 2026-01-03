@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizziezAPI.DTO_s;
+using QuizziezAPI.Exceptions; // Pamiętaj o tym usingu!
 using QuizziezAPI.Services;
 
 namespace QuizziezAPI.Controllers;
@@ -10,105 +11,103 @@ namespace QuizziezAPI.Controllers;
 [Route("api/[controller]")]
 public class QuizController : ControllerBase
 {
-
     private readonly IQuizService _quizService;
 
     public QuizController(IQuizService quizService)
     {
         _quizService = quizService;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetQuizzesAsync()
     {
-        try
-        {
-            return Ok(await _quizService.GetQuizzesAsync());
-        }
-        catch (Exception e)
-        {
-           return BadRequest(e.Message);
-        }
-        
+        var quizzes = await _quizService.GetQuizzesAsync();
+        return Ok(quizzes);
     }
-
+    
     [HttpGet("play")]
     public async Task<IActionResult> GetPlayAsync()
     {
-        try
-        {
-            return Ok(await _quizService.GetQuizzesAsync());
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-        
+        var quizzes = await _quizService.GetAllQuizzesAsync();
+        return Ok(quizzes);
     }
+    
     [HttpPost]
     public async Task<IActionResult> CreateQuizzezAsync([FromBody] CreateQuizDto body, CancellationToken cancellationToken)
     {
         try
         {
             await _quizService.CreateQuizAsync(body, cancellationToken);
-            return Ok(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status201Created);
         }
-        catch (Exception e)
+        catch (QuizValidationException ex)
         {
-            return BadRequest(e.Message);
+            return BadRequest(ex.Message);
         }
     }
-    [HttpDelete ("{id}")]
+    
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQuizzezAsync([FromRoute] int id, CancellationToken cancellationToken)
     {
         try
         {
             await _quizService.DeleteQuizzezAsync(id, cancellationToken);
-            return Ok(StatusCodes.Status204NoContent);
+            return NoContent();
         }
-        catch (Exception ex)
+        catch (QuizValidationException ex)
         {
-            return BadRequest(ex.Message);
+            return NotFound(ex.Message);
         }
     }
-
+    
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditQuizzezAsync([FromRoute] int id,[FromBody] EditQuizDto body, CancellationToken cancellationToken)
+    public async Task<IActionResult> EditQuizzezAsync([FromRoute] int id, [FromBody] EditQuizDto body, CancellationToken cancellationToken)
     {
         try
         {
-            await _quizService.EditQuizzezAsync(id,body, cancellationToken);
-            return Ok("Quiz updated");
+            await _quizService.EditQuizzezAsync(id, body, cancellationToken);
+            return NoContent();
         }
-        catch (Exception e)
+        catch (QuizNotFoundException ex)
         {
-            return BadRequest(e.Message);
+            return NotFound(ex.Message);
         }
     }
-
+    
     [HttpGet("options")]
     public async Task<IActionResult> GetOptionsAsync()
     {
-        try
-        {
-            return Ok(await _quizService.GetQuizzesOptionsAsync());
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        var options = await _quizService.GetQuizzesOptionsAsync();
+        return Ok(options);
     }
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuizzezByIdAsync([FromRoute] int id)
     {
         try
         {
-            return Ok(await _quizService.GetQuizById(id));
+            var quiz = await _quizService.GetQuizById(id);
+            return Ok(quiz);
         }
-        catch (Exception e)
+        catch (QuizNotFoundException ex)
         {
-            return BadRequest(e.Message);
+            return NotFound(ex.Message);
         }
+    }
+    
+    [HttpPost("{quizId}")]
+    public async Task<IActionResult> CreateQuizAttempt([FromRoute] int quizId, [FromBody] CreateQuizAttemptDto body,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _quizService.CreateQuizAttemptAsync(quizId, body, cancellationToken);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+        catch (QuizValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        
     }
 }

@@ -11,4 +11,6 @@ public interface IQuizService
     public Task EditQuizzezAsync([FromRoute] int id, EditQuizDto body, CancellationToken cancellationToken);
     public Task<QuizOptionsDto> GetQuizzesOptionsAsync();
     public Task<QuizzezDto> GetQuizById(int id);
+    public Task<IEnumerable<QuizzezDto>> GetAllQuizzesAsync();
+    public Task CreateQuizAttemptAsync(int quizId ,CreateQuizAttemptDto body, CancellationToken cancellationToken);
 }

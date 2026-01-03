@@ -26,3 +26,7 @@ export const getQuizById = async (api, quizId) => {
   const response = await api.get(`/api/quiz/${quizId}`);
   return response.data;
 }
+export const createQuizAttempt = async (api, quizId, data) => {
+  const response = await api.post(`/api/quiz/${quizId}`, data);
+  return response.data;
+}

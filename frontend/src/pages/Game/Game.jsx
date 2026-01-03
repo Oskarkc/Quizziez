@@ -4,33 +4,42 @@ import { useGetQuizById } from "../../hooks/useGetQuizById";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AnswerRadioComponent from "../../components/AnswerComponent/AnswerRadioComponent";
+import { useCreateQuizAttempt } from "../../hooks/useCreateQuizAttempt";
+import ResultDialog from "../../components/ResultDialog/ResultDialog";
 
 export default function Game() {
   const { quizId } = useParams();
   const { data, isLoading } = useGetQuizById(quizId);
-  const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const navigate = useNavigate();
+  const { userAnswers, handleAnswerSelect, onFinish , correctCount } = useCreateQuizAttempt(quizId);
+  const [isResultPage, setIsResultPage] = useState(false);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="gamepagelayout">
       <div className="header">
         <h1>{data.name}</h1>
       </div>
       <div className="questionblock">
-        <h2>Question {currentQuestionIndex + 1}:</h2>
+        <div className="questionheader">
+          <h2 className="questionheaderh2">
+            Question {currentQuestionIndex + 1} of {data.questions.length}
+          </h2>
+        </div>
         <p>{data.questions[currentQuestionIndex].question}</p>
         <div className="answersdiv">
           {data.questions[currentQuestionIndex].answers.map((answer, index) => (
-            <ButtonComponent
+            <AnswerRadioComponent
               key={index}
-              style={{ width: "300px", margin: "10px" }}
-            >
-              {answer.answer}
-            </ButtonComponent>
+              answerText={answer.answer}
+              isSelected={index === userAnswers[currentQuestionIndex]}
+              onClick={() => handleAnswerSelect(currentQuestionIndex, index)}
+            ></AnswerRadioComponent>
           ))}
         </div>
       </div>
@@ -46,8 +55,16 @@ export default function Game() {
           )}
         </div>
         <div>
-          {isLastQuestion ? (
-            <ButtonComponent style={{ width: "100px" }}>Finish</ButtonComponent>
+          {currentQuestionIndex + 1 == data.questions.length ? (
+            <ButtonComponent
+              style={{ width: "100px", backgroundColor: "green" }}
+              onClick={() => {
+                onFinish(data);
+                setIsResultPage(true);
+              }}
+            >
+              Finish
+            </ButtonComponent>
           ) : (
             <ButtonComponent
               style={{ width: "100px" }}
@@ -58,6 +75,16 @@ export default function Game() {
           )}
         </div>
       </div>
+      {isResultPage && (
+        <ResultDialog
+          correctCount={correctCount}
+          totalQuestions={data.questions.length}
+          onClose={() => {
+            setIsResultPage(false);
+            navigate("/home");
+          }}
+        />
+      )}
     </div>
   );
 }

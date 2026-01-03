@@ -1,0 +1,37 @@
+.answercomponent-wrapper{
+    border: 1px solid #4A90E2;
+    border-radius: 10px;
+    display: flex;
+    flex: 1;
+    cursor: pointer;
+}
+
+.answertextdiv{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.radiobuttondiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.answerradio-btn{
+    width: 40px;
+    height: 40px; 
+    border: 0px;        
+    font-size: 20px;                 
+    display: flex;                   
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: grey;
+}
+.answeroverlay{
+    border: 1px solid #4A90E2;
+}
+
+
+
