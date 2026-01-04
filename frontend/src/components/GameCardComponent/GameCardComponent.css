@@ -1,0 +1,15 @@
+.gamecard{
+    border: 1px solid #216e81;
+    border-radius: 20px;
+    padding: 20px;
+    margin-block: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.gamecardButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding-left: 40px;
+}

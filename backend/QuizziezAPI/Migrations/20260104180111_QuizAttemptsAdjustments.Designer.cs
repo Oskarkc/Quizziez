@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizziezAPI.Data;
 
@@ -11,9 +12,11 @@ using QuizziezAPI.Data;
 namespace QuizziezAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260104180111_QuizAttemptsAdjustments")]
+    partial class QuizAttemptsAdjustments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,7 +181,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("QuizziezAPI.Models.AppUser", b =>
@@ -267,7 +270,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("QuizziezAPI.Models.Difficulty", b =>
@@ -285,7 +288,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Difficulties", (string)null);
+                    b.ToTable("Difficulties");
                 });
 
             modelBuilder.Entity("QuizziezAPI.Models.Question", b =>
@@ -308,7 +311,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("QuizziezAPI.Models.Quiz", b =>
@@ -342,7 +345,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Quizzes", (string)null);
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("QuizziezAPI.Models.QuizAttempt", b =>
@@ -377,7 +380,7 @@ namespace QuizziezAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("QuizAttempts", (string)null);
+                    b.ToTable("QuizAttempts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

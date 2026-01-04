@@ -110,4 +110,10 @@ public class QuizController : ControllerBase
         }
         
     }
+
+    [HttpGet("attempts")]
+    public async Task<IActionResult> GetQuizAttemptsAsync()
+    {
+        return Ok(await _quizService.GetQuizAttemptsAsync());
+    }
 }

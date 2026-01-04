@@ -13,7 +13,7 @@ export default function Game() {
   const { data, isLoading } = useGetQuizById(quizId);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const navigate = useNavigate();
-  const { userAnswers, handleAnswerSelect, onFinish , correctCount } = useCreateQuizAttempt(quizId);
+  const { userAnswers, handleAnswerSelect, onFinish , correctCount } = useCreateQuizAttempt(data);
   const [isResultPage, setIsResultPage] = useState(false);
 
   if (isLoading) {

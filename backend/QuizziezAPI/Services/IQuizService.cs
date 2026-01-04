@@ -13,4 +13,5 @@ public interface IQuizService
     public Task<QuizzezDto> GetQuizById(int id);
     public Task<IEnumerable<QuizzezDto>> GetAllQuizzesAsync();
     public Task CreateQuizAttemptAsync(int quizId ,CreateQuizAttemptDto body, CancellationToken cancellationToken);
+    public Task<IEnumerable<QuizAttemptsDto>> GetQuizAttemptsAsync();
 }

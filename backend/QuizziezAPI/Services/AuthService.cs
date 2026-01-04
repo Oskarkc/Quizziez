@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using QuizziezAPI.Data;
 using QuizziezAPI.DTO_s;
 using QuizziezAPI.Exceptions;
 using QuizziezAPI.Models;
@@ -14,11 +16,15 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly AppDbContext _context;
 
-    public AuthService(UserManager<AppUser> userManager, IConfiguration configuration)
+    public AuthService(UserManager<AppUser> userManager, IConfiguration configuration, ICurrentUserService currentUserService, AppDbContext dbContext)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _currentUserService = currentUserService;
+        _context = dbContext;
     }
 
     public async Task<AuthResponseDto?> RegisterUserAsync(RegisterDto body)
@@ -63,6 +69,43 @@ public class AuthService : IAuthService
     
         var tokens = await CreateTokensForUserAsync(user);
         return tokens;
+    }
+
+    public async Task DeleteUserAsync(CancellationToken cancellationToken)
+    {
+        var userId = _currentUserService.UserId;
+        var user =  await _userManager.FindByIdAsync(userId);
+        if (user == null) throw new AuthException("invalid user");
+        
+        await _context.Quizzes
+            .Where(q => q.UserId == userId)
+            .ExecuteDeleteAsync(cancellationToken);
+        
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded) throw new AuthException("Could not delete user");
+    }
+
+    public async Task ChangeMailUserAsync(ChangeEmailDto body, CancellationToken cancellationToken)
+    {
+        var userId = _currentUserService.UserId;
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null) throw new AuthException("invalid user");
+        
+        var newEmail = body.Email;
+        
+        if (string.Equals(user.Email, newEmail, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new AuthException("New email is the same as the old one");
+        }
+        
+        var userWithNewEmail = await _userManager.FindByEmailAsync(newEmail);
+        if (userWithNewEmail != null)
+        {
+            throw new AuthException("Email is already taken");
+        }
+        
+        await _userManager.SetUserNameAsync(user, newEmail);
+        await _userManager.SetEmailAsync(user, newEmail);
     }
 
     public async Task RevokeRefreshTokenAsync(string userId)

@@ -45,6 +45,29 @@ public class AuthController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
+    [HttpDelete("deleteuser")]
+    public async Task<IActionResult> DeleteUser(CancellationToken cancellationToken)
+    {
+        await _authService.DeleteUserAsync(cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPut("changemailuser")]
+    public async Task<IActionResult> ChangeMail([FromBody] ChangeEmailDto body,CancellationToken cancellationToken)
+    {
+        try
+        {
+await _authService.ChangeMailUserAsync(body, cancellationToken);
+        return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(e.Message);
+        }
+        
+    }
     
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh()

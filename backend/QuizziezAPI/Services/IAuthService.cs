@@ -8,5 +8,6 @@ public interface IAuthService
     Task<AuthResponseDto?> RegisterUserAsync(RegisterDto dto);
     Task<AuthResponseDto?> LoginAsync(LoginDto dto);
     Task<AuthResponseDto?> RefreshTokenAsync(RefreshRequestDto dto);
-    Task RevokeRefreshTokenAsync(string userId);
+    Task DeleteUserAsync(CancellationToken cancellationToken);
+    Task ChangeMailUserAsync(ChangeEmailDto body, CancellationToken cancellationToken);
 }

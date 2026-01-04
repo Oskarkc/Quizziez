@@ -8,7 +8,9 @@ public class QuizAttempt
     [Key]
     public int Id { get; set; }
     public string UserId { get; set; } = null!;
-    public int QuizId { get; set; } 
+    public int QuizId { get; set; }
+    [MaxLength(300)]
+    public String QuizTitle { get; set; } = null!;
     [Required]
     public int Score { get; set; }
     [Required]

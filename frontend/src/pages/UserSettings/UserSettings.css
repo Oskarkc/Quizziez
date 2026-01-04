@@ -1,0 +1,35 @@
+.usersettingsdiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.setupusersettingsdiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a89e9e;
+    border-radius: 40px;
+    padding: 50px;
+    background-color: white;
+}
+.confirmationdialog{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a89e9e;
+    border-radius: 20px;
+    padding: 30px;
+    background-color: white;
+    z-index: 1000;
+    position: fixed;   
+}
+.confirmationbtndiv{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+}

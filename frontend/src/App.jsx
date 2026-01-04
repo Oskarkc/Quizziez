@@ -6,6 +6,8 @@ import AuthProvider from "./auth/AuthProvider.jsx";
 import MyQuiz from "./pages/MyQuiz/MyQuiz.jsx";
 import Play from "./pages/Play/Play.jsx";
 import Game from "./pages/Game/Game.jsx";
+import History from "./pages/History/History.jsx";
+import UserSettings from "./pages/UserSettings/UserSettings.jsx";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Route path="/myquizzes" element={<MyQuiz />} />
           <Route path="/play" element={<Play />} />
           <Route path="/play/:quizId" element={<Game />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/settings" element={<UserSettings />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

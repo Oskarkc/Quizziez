@@ -18,22 +18,19 @@ public class AppDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // QuizAttempt → User
+        
         modelBuilder.Entity<QuizAttempt>()
             .HasOne(qa => qa.User)
             .WithMany(u => u.QuizAttempts)
             .HasForeignKey(qa => qa.UserId)
             .OnDelete(DeleteBehavior.Cascade); 
 
-        // QuizAttempt → Quiz
         modelBuilder.Entity<QuizAttempt>()
             .HasOne(qa => qa.Quiz)
             .WithMany(q => q.QuizAttempts)
             .HasForeignKey(qa => qa.QuizId)
             .OnDelete(DeleteBehavior.Cascade); 
-
-        // Quiz → User
+        
         modelBuilder.Entity<Quiz>()
             .HasOne(q => q.AppUser)
             .WithMany(u => u.Quizzes)

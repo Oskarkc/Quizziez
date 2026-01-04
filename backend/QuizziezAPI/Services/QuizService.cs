@@ -244,10 +244,27 @@ public class QuizService : IQuizService
         {
             QuizId = quizId,
             UserId = userId,
+            QuizTitle = body.QuizTitle,
             Score = body.Score,
             PlayedAt = DateTime.UtcNow,
         };
         _context.QuizAttempts.Add(quizAttempt);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<QuizAttemptsDto>> GetQuizAttemptsAsync()
+    {
+        var userId = _currentUserService.UserId;
+        var attempts = await _context.QuizAttempts
+            .Where(q => q.UserId == userId)
+            .ToListAsync();
+        return attempts.Select(a => new QuizAttemptsDto()
+        {
+            Id = a.Id,
+            QuizId = a.QuizId,
+            QuizTitle = a.QuizTitle,
+            Score = a.Score,
+            PlayedAt = a.PlayedAt,
+        });
     }
 }
